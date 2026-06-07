@@ -1,8 +1,8 @@
 import fastf1
 import pandas as pd
 import numpy as np
-from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error
+import xgboost as xgb
 
 # Load cached data (already downloaded so will be instant)
 fastf1.Cache.enable_cache('f1_cache')
@@ -28,8 +28,13 @@ ver_clean = ver_clean.dropna(subset=['TyreLife', 'LapTimeSeconds'])
 X = ver_clean[['TyreLife']]
 y = ver_clean['LapTimeSeconds']
 
-# Train the model
-model = LinearRegression()
+# Train the model using XGBoost
+model = xgb.XGBRegressor(
+    n_estimators=50,
+    max_depth=3,
+    learning_rate=0.1,
+    verbosity=0
+)
 model.fit(X, y)
 
 # See how accurate it is on the same data
